@@ -8,6 +8,7 @@ import com.gzm.project.model.band.Band;
 import com.gzm.project.model.band.dto.ReqUpdateDto;
 import com.gzm.project.model.band.dto.RespBandandUsername;
 import com.gzm.project.model.band.dto.RespListFollowed;
+import com.gzm.project.model.follow.dto.RespListFollowNotFollowId;
 
 public interface BandMapper {
 	
@@ -30,6 +31,8 @@ public interface BandMapper {
 	public int 나의밴드삭제(int bandId);
 
 	public List<RespListFollowed> findFollowBandAll(int userId);
+
+	public List<RespListFollowNotFollowId> findbyBandId(int bandId);
 
 
 	

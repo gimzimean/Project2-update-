@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gzm.project.model.RespCM;
 import com.gzm.project.model.band.Band;
+import com.gzm.project.model.follow.Follow;
 import com.gzm.project.model.user.User;
 import com.gzm.project.service.BandService;
 
@@ -58,10 +59,15 @@ public class BandController {
 
 	@GetMapping("/band/go/{bandId}")
 	public String go(@PathVariable int bandId, Model model) {
+		
 		User principal = (User) session.getAttribute("principal");
 		model.addAttribute("principal", principal);
 
 		model.addAttribute("band", bandService.밴드상세보기(bandId));
+		
+	
+		
+		model.addAttribute("FollowStatus",bandService.팔로우상태보기(bandId));
 
 		return "/pages/examples/profile2";
 	}

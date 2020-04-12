@@ -96,28 +96,59 @@
 						<c:forEach var="band" items="${band}" varStatus="index">
 							<div class="col-lg-6">
 								<div class="card card-warning card-outline">
-									<div class="card-body">
-										<h5 class="card-title">${band.bandName }</h5>
-										<p class="card-text">${band.bandInfo }</p>
+									<div class="card-body container">
 
-										<img src="/resources/media/${band.bandFile}"
-											class="rounded-circle my__img ml-auto" width="40px"
-											height="40px"
-											 />
-										
-											 onerror="javascript:this.src = '/images/unknown.jpg' "
+										<div class="row">
+											<div class="col-md-10">
+												<h5 class="card-title">${band.bandName }</h5>
+												<p class="card-text">${band.bandInfo }</p>
+											</div>
+											<div class="col-md-2 float-right">
+												<img src="/resources/media/${band.bandFile}"
+													class="rounded-circle my__img ml-auto" width="40px"
+													height="40px"
+													onerror="javascript:this.src = '/resources/img/_Unknown.webp' " />
 
-										<div class="card-footer">
-											<a href="/band/go/${band.bandId }" class="btn btn-secondary">Go</a>
-											<p class="card-text text-right">${band.username }</p>
+											</div>
 										</div>
+
+										<div class="card-footer container-fluid">
+											<div class="row">
+												<div class="col-md-10">
+													<p class="card-text">by. ${band.username }</p>
+												</div>
+												<div class="col-md-2 float-right">
+													<a href="/band/go/${band.bandId }"
+														class="btn btn-secondary">Go</a>
+												</div>
+											</div>
+
+										</div>
+
 									</div>
 								</div>
 							</div>
 						</c:forEach>
 
 
- 
+
+						<div class="card-header container-fluid">
+							<div class="row">
+								<div class="col-md-10">
+									<h3 class="w-75 p-3">여기요</h3>
+								</div>
+								<div class="col-md-2 float-right">
+									<button class="btn btn-primary"
+										(click)="onAddCategoieModal(addCategorieModal)">Add</button>
+									<button class="btn btn-primary" style="margin-left: 1em"
+										(click)="onAddCategoieModal(content)">Edit</button>
+								</div>
+							</div>
+						</div>
+
+
+
+
 
 						<!-- /.col-md-6 -->
 

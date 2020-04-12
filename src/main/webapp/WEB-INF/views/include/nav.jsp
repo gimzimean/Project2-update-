@@ -201,13 +201,13 @@
 						
 						</li>
 
-
+<!-- 
 						<li class="nav-item"><a href="/band/calendar"
 							class="nav-link"> <i class="nav-icon far fa-calendar-alt"></i>
 								<p>
 									Calendar <span class="badge badge-info right">2</span>
 								</p>
-						</a></li>
+						</a></li> -->
 
 						<li class="nav-item" style="height: 200px;"><a
 							href="/follow/contacts/${principal.userId }" class="nav-link"> <i

@@ -67,7 +67,8 @@
 									<div class="text-center">
 										<img class="profile-user-img img-fluid img-circle"
 											src="/resources/media/${band.bandFile}"
-											alt="User profile picture">
+											alt="User profile picture"
+											onerror="javascript:this.src = '/resources/img/_Unknown.webp' ">
 									</div>
 
 
@@ -80,15 +81,60 @@
 											class="float-right">1,322</a></li>
 									</ul>
 
+
+
+
+
 									<c:if test="${not empty sessionScope.principal}">
 										<c:if test="${sessionScope.principal.userId ne band.userId}">
 
-											<button id="follow--btn" class="btn btn-primary btn-block"
-												value="${sessionScope.principal.userId}">
-												<b>Follow</b>
-											</button>
 
 											<input type="hidden" value="${band.userId }" id="toId">
+											
+											${FollowStatus}
+											${FollowStatus[0].toId}
+											
+											
+											<c:forEach items="${FollowStatus}" var="FollowId">
+												1 : ${FollowId.toId } <br />
+												1': ${band.userId } <br />
+												2 : ${FollowId.fromId } <br />
+												2': ${sessionScope.principal.userId} <br />
+
+
+											</c:forEach>
+											
+
+											<c:choose>
+
+
+												<c:when
+													test="${FollowStatus[0].toId eq band.userId && FollowStatus[0].fromId eq sessionScope.principal.userId}">
+															
+													<button id="unfollow--btn"
+														class="btn btn-secondary btn-block"
+														value="${sessionScope.principal.userId}">
+														<b>Following</b>
+													</button>
+												</c:when>
+												<c:otherwise>
+
+													<button id="follow--btn" class="btn btn-primary btn-block"
+														value="${sessionScope.principal.userId}">
+														<b>Follow</b>
+													</button>
+
+												</c:otherwise>
+
+
+
+
+											</c:choose>
+
+
+
+
+
 										</c:if>
 									</c:if>
 
@@ -115,7 +161,7 @@
 								<!-- /.card-body -->
 							</div>
 							<!-- /.card -->
-						</div>      
+						</div>
 						<!-- /.col -->
 						<div class="col-md-9">
 							<div class="card">
@@ -124,9 +170,9 @@
 										<li class="nav-item"><a class="nav-link active"
 											href="#activity" data-toggle="tab">게시판</a></li>
 										<li class="nav-item"><a class="nav-link"
-											href="/band/calendar" data-toggle="tab">일정</a></li>
-											
-											
+											href="/band/calendar">일정</a></li>
+
+
 
 										<c:if test="${sessionScope.principal.userId eq band.userId}">
 
@@ -137,8 +183,12 @@
 
 									</ul>
 								</div>
-								
+
 								<!-- /.card-header -->
+
+
+
+
 								<div class="card-body">
 									<div class="tab-content">
 										<div class="active tab-pane" id="activity">
@@ -273,7 +323,8 @@
 												action="/band/update/${band.bandId}" method="POST"
 												enctype="multipart/form-data">
 
-												<input type="hidden" id="bandId" name="bandId" value="${band.bandId}">
+												<input type="hidden" id="bandId" name="bandId"
+													value="${band.bandId}">
 
 												<div class="form-group row">
 													<label for="bandName" class="col-sm-2 col-form-label">밴드
@@ -421,17 +472,17 @@
 	<script src="/resources/dist/js/demo.js"></script>
 
 	<script type="text/javascript">
-	
-	
+		/*follow -> unfollow */
+
 		$('#follow--btn').on('click', function() {
 			var data = {
 				fromId : $('#follow--btn').val(),
 				toId : $('#toId').val(),
 				bandId : $('#bandId').val()
 			}
-			
-			var bandId=$('#bandId').val()
-			
+
+			var bandId = $('#bandId').val()
+
 			$button = $(this);
 
 			if ($button.hasClass('alert-light Following')) {
@@ -455,7 +506,6 @@
 						alert('11언팔로우 실패');
 					}
 				}).fail(function(r) {
-					alert(r)
 					alert('22언팔로우 실패');
 				});
 
@@ -498,6 +548,88 @@
 				$button.text('Following');
 			}
 		});
+		/*follow -> unfollow 끝 */
+
+		/*Unfollow -> follow 시작*/
+
+		$('#unfollow--btn').on('click', function() {
+			var data = {
+				fromId : $('#follow--btn').val(),
+				toId : $('#toId').val(),
+				bandId : $('#bandId').val()
+			}
+
+			var bandId = $('#bandId').val()
+
+			$button = $(this);
+
+			if ($button.hasClass('alert-light Following')) {
+				/* Do Unfollow  */
+
+				$.ajax({
+					type : 'delete',
+					url : '/unfollow/' + data.fromId,
+					data : JSON.stringify(data),
+					contentType : "application/json; charset=utf-8",
+					dataType : 'json'
+				}).done(function(r) {
+					if (r.statusCode == 200) {
+						alert('언팔로우 성공');
+
+						$button.removeClass('alert-light Following');
+						$button.removeClass('btn-secondary Unfollow');
+						$button.text('Follow');
+
+					} else {
+						alert('11언팔로우 실패');
+					}
+				}).fail(function(r) {
+					alert('22언팔로우 실패');
+				});
+
+			} else {
+				/*Do Follow  */
+
+				$.ajax({
+					type : 'POST',
+					url : '/follow/' + data.fromId,
+					data : JSON.stringify(data),
+					contentType : "application/json; charset=utf-8",
+					dataType : 'json'
+				}).done(function(r) {
+					if (r.statusCode == 200) {
+						alert('팔로우 성공');
+
+						$button.addClass('alert-light Following');
+						$button.text('Following');
+
+					} else {
+						alert('팔로우 실패1');
+					}
+				}).fail(function(r) {
+					alert('팔로우 실패22');
+				});
+
+			}
+
+		});
+
+		$('#follow--btn').hover(function() {
+			$button = $(this);
+			if ($button.hasClass('alert-light Following')) {
+				$button.addClass('btn-secondary Unfollow');
+				$button.text('Unfollow');
+			}
+		}, function() {
+			if ($button.hasClass('alert-light Following')) {
+				$button.removeClass('btn-secondary Unfollow');
+				$button.text('Following');
+			}
+		});
+		
+		/* Unfollow -> follow 끝  */
+		
+		
 
 		$('#followNUM').on('click', function() {
 			var data = {

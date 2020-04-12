@@ -13,6 +13,7 @@ import com.gzm.project.model.band.Band;
 import com.gzm.project.model.band.dto.ReqUpdateDto;
 import com.gzm.project.model.band.dto.RespBandandUsername;
 import com.gzm.project.model.band.dto.RespListFollowed;
+import com.gzm.project.model.follow.dto.RespListFollowNotFollowId;
 import com.gzm.project.model.user.User;
 
 @Service
@@ -45,6 +46,12 @@ public class BandService{
 	public RespBandandUsername 밴드상세보기(int bandId) {
 		return bandmapper.findById(bandId);
 	}
+	
+	public List<RespListFollowNotFollowId> 팔로우상태보기(int bandId) {
+		// TODO Auto-generated method stub
+		return bandmapper.findbyBandId(bandId);
+	}
+
 
 
 	public RespBandandUsername 수정하기(int bandId) {
@@ -100,6 +107,8 @@ public class BandService{
 		
 		
 	}
+
+
 
 
 
